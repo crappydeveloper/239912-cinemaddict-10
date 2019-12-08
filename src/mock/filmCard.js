@@ -25,23 +25,20 @@ const getRandomPosition = (arr) => {
 };
 
 const getDescription = () => {
-  //взять рандомное число эл-ов из массива
-  //сформировать из них другой массива
-  //через join собрать строку
   let descriptionsCopy = Array.from(DESCRIPTIONS);
 
   descriptionsCopy.length = getRandomPosition(descriptionsCopy) + 1;
-  descriptionsCopy = descriptionsCopy.join(' ');
+  descriptionsCopy = descriptionsCopy.join(` `);
   return descriptionsCopy;
 };
 
-{
-  title: TITLES[getRandomItems(TITLES)],
+export const mockData = {
+  title: TITLES[getRandomPosition(TITLES)],
   rating: 9.0,
   info: {
     year: 1988,
-    duration: "1h 45m",
-    genre: Drama
+    duration: `1h 45m`,
+    genre: `Drama`
   },
-  description: getDescription();
-}
+  description: getDescription()
+};
