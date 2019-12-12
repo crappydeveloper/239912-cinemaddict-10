@@ -20,6 +20,16 @@ const TITLES = [
   `Сторож`
 ];
 
+const POSTERS = [
+  `./images/posters/the-man-with-the-golden-arm.jpg`,
+  `./images/posters/made-for-each-other.png`,
+  `./images/posters/popeye-meets-sinbad.png`,
+  `./images/posters/sagebrush-trail.jpg`,
+  `./images/posters/santa-claus-conquers-the-martians.jpg`,
+  `./images/posters/the-dance-of-life.jpg`,
+  `./images/posters/the-great-flamarion.jpg`
+];
+
 const getRandomPosition = (arr) => {
   return Math.floor(Math.random() * arr.length);
 };
@@ -35,6 +45,7 @@ const getDescription = () => {
 export const mockData = {
   title: TITLES[getRandomPosition(TITLES)],
   rating: 9.0,
+  posterSrc: POSTERS[getRandomPosition(POSTERS)],
   info: {
     year: 1988,
     duration: `1h 45m`,
