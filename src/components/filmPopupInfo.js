@@ -1,3 +1,5 @@
+import {generatePopup} from '../mock/filmPopupInfo.js';
+
 export const createFilmPopupInfoTemplate = () => {
   return (
     `<section class="film-details">
@@ -8,59 +10,59 @@ export const createFilmPopupInfoTemplate = () => {
           </div>
           <div class="film-details__info-wrap">
             <div class="film-details__poster">
-              <img class="film-details__poster-img" src="./images/posters/the-great-flamarion.jpg" alt="">
+              <img class="film-details__poster-img" src="${generatePopup().poster}" alt="">
 
-              <p class="film-details__age">18+</p>
+              <p class="film-details__age">${generatePopup().minAge}+</p>
             </div>
 
             <div class="film-details__info">
               <div class="film-details__info-head">
                 <div class="film-details__title-wrap">
-                  <h3 class="film-details__title">The Great Flamarion</h3>
-                  <p class="film-details__title-original">Original: The Great Flamarion</p>
+                  <h3 class="film-details__title">${generatePopup().title}</h3>
+                  <p class="film-details__title-original">Original: ${generatePopup().titleOriginal}</p>
                 </div>
 
                 <div class="film-details__rating">
-                  <p class="film-details__total-rating">8.9</p>
+                  <p class="film-details__total-rating">${generatePopup().rating}</p>
                 </div>
               </div>
 
               <table class="film-details__table">
                 <tr class="film-details__row">
                   <td class="film-details__term">Director</td>
-                  <td class="film-details__cell">Anthony Mann</td>
+                  <td class="film-details__cell">${generatePopup().director}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Writers</td>
-                  <td class="film-details__cell">Anne Wigton, Heinz Herald, Richard Weil</td>
+                  <td class="film-details__cell">${generatePopup().writers.join(`, `)}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Actors</td>
-                  <td class="film-details__cell">Erich von Stroheim, Mary Beth Hughes, Dan Duryea</td>
+                  <td class="film-details__cell">${generatePopup().actors.join(`, `)}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Release Date</td>
-                  <td class="film-details__cell">30 March 1945</td>
+                  <td class="film-details__cell">${generatePopup().releaseDate}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Runtime</td>
-                  <td class="film-details__cell">1h 18m</td>
+                  <td class="film-details__cell">${generatePopup().runtime}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Country</td>
-                  <td class="film-details__cell">USA</td>
+                  <td class="film-details__cell">${generatePopup().country}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Genres</td>
                   <td class="film-details__cell">
-                    <span class="film-details__genre">Drama</span>
-                    <span class="film-details__genre">Film-Noir</span>
-                    <span class="film-details__genre">Mystery</span></td>
+                    <span class="film-details__genre">${generatePopup().genres[0]}</span>
+                    <span class="film-details__genre">${generatePopup().genres[1]}</span>
+                    <span class="film-details__genre">${generatePopup().genres[2]}</span></td>
                 </tr>
               </table>
 
               <p class="film-details__film-description">
-                The film opens following a murder at a cabaret in Mexico City in 1936, and then presents the events leading up to it in flashback. The Great Flamarion (Erich von Stroheim) is an arrogant, friendless, and misogynous marksman who displays his trick gunshot act in the vaudeville circuit. His show features a beautiful assistant, Connie (Mary Beth Hughes) and her drunken husband Al (Dan Duryea), Flamarion's other assistant. Flamarion falls in love with Connie, the movie's femme fatale, and is soon manipulated by her into killing her no good husband during one of their acts.
+                ${generatePopup().description}
               </p>
             </div>
           </div>
@@ -87,10 +89,10 @@ export const createFilmPopupInfoTemplate = () => {
                   <img src="./images/emoji/smile.png" width="55" height="55" alt="emoji">
                 </span>
                 <div>
-                  <p class="film-details__comment-text">Interesting setting and a good cast</p>
+                  <p class="film-details__comment-text">${generatePopup().comments[0].text}</p>
                   <p class="film-details__comment-info">
-                    <span class="film-details__comment-author">Tim Macoveev</span>
-                    <span class="film-details__comment-day">2019/12/31 23:59</span>
+                    <span class="film-details__comment-author">${generatePopup().comments[0].author}</span>
+                    <span class="film-details__comment-day">${generatePopup().comments[0].date}</span>
                     <button class="film-details__comment-delete">Delete</button>
                   </p>
                 </div>
@@ -100,10 +102,10 @@ export const createFilmPopupInfoTemplate = () => {
                   <img src="./images/emoji/sleeping.png" width="55" height="55" alt="emoji">
                 </span>
                 <div>
-                  <p class="film-details__comment-text">Booooooooooring</p>
+                  <p class="film-details__comment-text">${generatePopup().comments[1].text}</p>
                   <p class="film-details__comment-info">
-                    <span class="film-details__comment-author">John Doe</span>
-                    <span class="film-details__comment-day">2 days ago</span>
+                    <span class="film-details__comment-author">${generatePopup().comments[1].author}</span>
+                    <span class="film-details__comment-day">${generatePopup().comments[1].date}</span>
                     <button class="film-details__comment-delete">Delete</button>
                   </p>
                 </div>
@@ -113,10 +115,10 @@ export const createFilmPopupInfoTemplate = () => {
                   <img src="./images/emoji/puke.png" width="55" height="55" alt="emoji">
                 </span>
                 <div>
-                  <p class="film-details__comment-text">Very very old. Meh</p>
+                  <p class="film-details__comment-text">${generatePopup().comments[2].text}</p>
                   <p class="film-details__comment-info">
-                    <span class="film-details__comment-author">John Doe</span>
-                    <span class="film-details__comment-day">2 days ago</span>
+                    <span class="film-details__comment-author">${generatePopup().comments[2].author}</span>
+                    <span class="film-details__comment-day">${generatePopup().comments[2].date}</span>
                     <button class="film-details__comment-delete">Delete</button>
                   </p>
                 </div>
@@ -126,10 +128,10 @@ export const createFilmPopupInfoTemplate = () => {
                   <img src="./images/emoji/angry.png" width="55" height="55" alt="emoji">
                 </span>
                 <div>
-                  <p class="film-details__comment-text">Almost two hours? Seriously?</p>
+                  <p class="film-details__comment-text">${generatePopup().comments[3].text}</p>
                   <p class="film-details__comment-info">
-                    <span class="film-details__comment-author">John Doe</span>
-                    <span class="film-details__comment-day">Today</span>
+                    <span class="film-details__comment-author">${generatePopup().comments[3].author}</span>
+                    <span class="film-details__comment-day">${generatePopup().comments[3].date}</span>
                     <button class="film-details__comment-delete">Delete</button>
                   </p>
                 </div>

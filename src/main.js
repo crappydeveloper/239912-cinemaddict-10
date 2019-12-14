@@ -1,12 +1,12 @@
-import {createBtnShowMoreTemplate} from '../src/components/btnShowMore.js';
-import {createFilmCardTemplate} from '../src/components/filmCard.js';
-import {createFilmPopupInfoTemplate} from '../src/components/filmPopupInfo.js';
-import {createFilmsSectionTemplate} from '../src/components/filmsSection.js';
-import {createMostCommentedTemplate} from '../src/components/mostCommented.js';
-import {createNavigationTemplate} from '../src/components/navigation.js';
-import {createSortTemplate} from '../src/components/sort.js';
-import {createTopRatedTemplate} from '../src/components/topRated.js';
-import {createUserRankTemplate} from '../src/components/userRank.js';
+import {createBtnShowMoreTemplate} from './components/btnShowMore.js';
+import {createFilmCardTemplate} from './components/filmCard.js';
+import {createFilmPopupInfoTemplate} from './components/filmPopupInfo.js';
+import {createFilmsSectionTemplate} from './components/filmsSection.js';
+import {createMostCommentedTemplate} from './components/mostCommented.js';
+import {createNavigationTemplate} from './components/navigation.js';
+import {createSortTemplate} from './components/sort.js';
+import {createTopRatedTemplate} from './components/topRated.js';
+import {createUserRankTemplate} from './components/userRank.js';
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
