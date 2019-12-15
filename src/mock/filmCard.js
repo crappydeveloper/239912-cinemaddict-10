@@ -17,14 +17,15 @@ const getDescription = () => {
 const generateCard = () => {
   return {
     title: TITLES[getRandomPosition(TITLES)],
-    rating: 9.0,
+    rating: (Math.random() * 10).toFixed(1),
     posterSrc: POSTERS[getRandomPosition(POSTERS)],
     info: {
       year: 1988,
       duration: `1h 45m`,
       genre: `Drama`
     },
-    description: getDescription()
+    description: getDescription(),
+    numberOfComments: Math.floor(Math.random() * 30)
   };
 };
 

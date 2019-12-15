@@ -32,3 +32,46 @@ render(siteFilmsListBlockElement, createBtnShowMoreTemplate(), `beforeend`);
 render(siteFilmsBlockElement, createTopRatedTemplate(), `beforeend`);
 render(siteFilmsBlockElement, createMostCommentedTemplate(), `beforeend`);
 render(siteMainElement, createFilmPopupInfoTemplate(), `beforeend`);
+
+
+const cardsInFilmsList = document.querySelectorAll(`.films-list .film-card`);
+const cardsInFilmsListArr = [...cardsInFilmsList];
+const topRatedBlock = document.querySelector(`.films-list--extra:nth-of-type(2) .films-list__container`);
+const mostCommentedBlock = document.querySelector(`.films-list--extra:nth-of-type(3) .films-list__container`);
+
+const compareByComments = (a, b) => {
+  let commentsInA = a.querySelector(`.film-card__comments`).innerText.slice(0, -9);
+  let commentsInB = b.querySelector(`.film-card__comments`).innerText.slice(0, -9);
+
+  if (+commentsInA > +commentsInB) {
+    return -1;
+  }
+  if (+commentsInA < +commentsInB) {
+    return 1;
+  }
+  return 0;
+};
+
+const compareByRating = (a, b) => {
+  let ratingOfA = a.querySelector(`.film-card__rating`).innerText;
+  let ratingOfB = b.querySelector(`.film-card__rating`).innerText;
+
+  if (+ratingOfA > +ratingOfB) {
+    return -1;
+  }
+  if (+ratingOfA < +ratingOfB) {
+    return 1;
+  }
+
+  return 0;
+};
+
+cardsInFilmsListArr.sort(compareByRating);
+for (let i = 0; i < 2; i++) {
+  topRatedBlock.insertAdjacentElement(`beforeend`, cardsInFilmsListArr[i].cloneNode(true));
+}
+
+cardsInFilmsListArr.sort(compareByComments);
+for (let i = 0; i < 2; i++) {
+  mostCommentedBlock.insertAdjacentElement(`beforeend`, cardsInFilmsListArr[i].cloneNode(true));
+}

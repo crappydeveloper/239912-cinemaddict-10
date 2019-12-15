@@ -23,7 +23,7 @@ const generatePopup = () => {
     poster: POSTERS[getRandomPosition(POSTERS)],
     title: TITLES[getRandomPosition(TITLES)],
     titleOriginal: TITLES[getRandomPosition(TITLES)],
-    rating: 9.0,
+    rating: (Math.random() * 10).toFixed(1),
     director: `Юрий Быков`,
     author: `Vasiliy Pupkin`,
     writers: [`Л.Н.Толстой`, `А.С.Пушкин`],
