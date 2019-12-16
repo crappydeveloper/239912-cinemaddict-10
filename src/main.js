@@ -43,7 +43,7 @@ const renderCards = (count) => {
   }
 
   render(siteCardsBlockElement, createFilmCardTemplate(cardsToRender), `beforeend`);
-}
+};
 renderCards(5);
 
 render(siteFilmsListBlockElement, createBtnShowMoreTemplate(), `beforeend`);

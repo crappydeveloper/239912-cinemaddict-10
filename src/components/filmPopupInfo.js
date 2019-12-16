@@ -1,5 +1,3 @@
-import {generatePopup} from '../mock/filmPopupInfo.js';
-
 const createCommentMarkup = (comment) => {
   const {text, author, date} = comment;
 
