@@ -1,6 +1,46 @@
 import {generatePopup} from '../mock/filmPopupInfo.js';
 
-export const createFilmPopupInfoTemplate = () => {
+const createCommentMarkup = (comment) => {
+  const {text, author, date} = comment;
+
+  return (
+    `<li class="film-details__comment">
+      <span class="film-details__comment-emoji">
+        <img src="./images/emoji/smile.png" width="55" height="55" alt="emoji">
+      </span>
+      <div>
+        <p class="film-details__comment-text">${text}</p>
+        <p class="film-details__comment-info">
+          <span class="film-details__comment-author">${author}</span>
+          <span class="film-details__comment-day">${date}</span>
+          <button class="film-details__comment-delete">Delete</button>
+        </p>
+      </div>
+    </li>`
+  );
+};
+
+
+export const createFilmPopupInfoTemplate = (popupInfo) => {
+  const {
+    poster,
+    minAge,
+    title,
+    titleOriginal,
+    rating,
+    director,
+    writers,
+    actors,
+    releaseDate,
+    runtime,
+    country,
+    genres,
+    description,
+    comments
+  } = popupInfo;
+
+  const commentsMarkup = comments.map((it) => createCommentMarkup(it)).join(`\n`);
+
   return (
     `<section class="film-details">
       <form class="film-details__inner" action="" method="get">
@@ -10,59 +50,59 @@ export const createFilmPopupInfoTemplate = () => {
           </div>
           <div class="film-details__info-wrap">
             <div class="film-details__poster">
-              <img class="film-details__poster-img" src="${generatePopup().poster}" alt="">
+              <img class="film-details__poster-img" src="${poster}" alt="">
 
-              <p class="film-details__age">${generatePopup().minAge}+</p>
+              <p class="film-details__age">${minAge}+</p>
             </div>
 
             <div class="film-details__info">
               <div class="film-details__info-head">
                 <div class="film-details__title-wrap">
-                  <h3 class="film-details__title">${generatePopup().title}</h3>
-                  <p class="film-details__title-original">Original: ${generatePopup().titleOriginal}</p>
+                  <h3 class="film-details__title">${title}</h3>
+                  <p class="film-details__title-original">Original: ${titleOriginal}</p>
                 </div>
 
                 <div class="film-details__rating">
-                  <p class="film-details__total-rating">${generatePopup().rating}</p>
+                  <p class="film-details__total-rating">${rating}</p>
                 </div>
               </div>
 
               <table class="film-details__table">
                 <tr class="film-details__row">
                   <td class="film-details__term">Director</td>
-                  <td class="film-details__cell">${generatePopup().director}</td>
+                  <td class="film-details__cell">${director}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Writers</td>
-                  <td class="film-details__cell">${generatePopup().writers.join(`, `)}</td>
+                  <td class="film-details__cell">${writers.join(`, `)}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Actors</td>
-                  <td class="film-details__cell">${generatePopup().actors.join(`, `)}</td>
+                  <td class="film-details__cell">${actors.join(`, `)}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Release Date</td>
-                  <td class="film-details__cell">${generatePopup().releaseDate}</td>
+                  <td class="film-details__cell">${releaseDate}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Runtime</td>
-                  <td class="film-details__cell">${generatePopup().runtime}</td>
+                  <td class="film-details__cell">${runtime}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Country</td>
-                  <td class="film-details__cell">${generatePopup().country}</td>
+                  <td class="film-details__cell">${country}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Genres</td>
                   <td class="film-details__cell">
-                    <span class="film-details__genre">${generatePopup().genres[0]}</span>
-                    <span class="film-details__genre">${generatePopup().genres[1]}</span>
-                    <span class="film-details__genre">${generatePopup().genres[2]}</span></td>
+                    <span class="film-details__genre">${genres[0]}</span>
+                    <span class="film-details__genre">${genres[1]}</span>
+                    <span class="film-details__genre">${genres[2]}</span></td>
                 </tr>
               </table>
 
               <p class="film-details__film-description">
-                ${generatePopup().description}
+                ${description}
               </p>
             </div>
           </div>
@@ -84,58 +124,7 @@ export const createFilmPopupInfoTemplate = () => {
             <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">4</span></h3>
 
             <ul class="film-details__comments-list">
-              <li class="film-details__comment">
-                <span class="film-details__comment-emoji">
-                  <img src="./images/emoji/smile.png" width="55" height="55" alt="emoji">
-                </span>
-                <div>
-                  <p class="film-details__comment-text">${generatePopup().comments[0].text}</p>
-                  <p class="film-details__comment-info">
-                    <span class="film-details__comment-author">${generatePopup().comments[0].author}</span>
-                    <span class="film-details__comment-day">${generatePopup().comments[0].date}</span>
-                    <button class="film-details__comment-delete">Delete</button>
-                  </p>
-                </div>
-              </li>
-              <li class="film-details__comment">
-                <span class="film-details__comment-emoji">
-                  <img src="./images/emoji/sleeping.png" width="55" height="55" alt="emoji">
-                </span>
-                <div>
-                  <p class="film-details__comment-text">${generatePopup().comments[1].text}</p>
-                  <p class="film-details__comment-info">
-                    <span class="film-details__comment-author">${generatePopup().comments[1].author}</span>
-                    <span class="film-details__comment-day">${generatePopup().comments[1].date}</span>
-                    <button class="film-details__comment-delete">Delete</button>
-                  </p>
-                </div>
-              </li>
-              <li class="film-details__comment">
-                <span class="film-details__comment-emoji">
-                  <img src="./images/emoji/puke.png" width="55" height="55" alt="emoji">
-                </span>
-                <div>
-                  <p class="film-details__comment-text">${generatePopup().comments[2].text}</p>
-                  <p class="film-details__comment-info">
-                    <span class="film-details__comment-author">${generatePopup().comments[2].author}</span>
-                    <span class="film-details__comment-day">${generatePopup().comments[2].date}</span>
-                    <button class="film-details__comment-delete">Delete</button>
-                  </p>
-                </div>
-              </li>
-              <li class="film-details__comment">
-                <span class="film-details__comment-emoji">
-                  <img src="./images/emoji/angry.png" width="55" height="55" alt="emoji">
-                </span>
-                <div>
-                  <p class="film-details__comment-text">${generatePopup().comments[3].text}</p>
-                  <p class="film-details__comment-info">
-                    <span class="film-details__comment-author">${generatePopup().comments[3].author}</span>
-                    <span class="film-details__comment-day">${generatePopup().comments[3].date}</span>
-                    <button class="film-details__comment-delete">Delete</button>
-                  </p>
-                </div>
-              </li>
+              ${commentsMarkup}
             </ul>
 
             <div class="film-details__new-comment">

@@ -1,18 +1,18 @@
-import {generateCard} from '../mock/filmCard.js';
+const createFilmCardMarkup = (card) => {
+  const {title, rating, info: {year, duration, genre}, posterSrc, description, numberOfComments} = card;
 
-export const createFilmCardTemplate = () => {
   return (
     `<article class="film-card">
-      <h3 class="film-card__title">${generateCard().title}</h3>
-      <p class="film-card__rating">${generateCard().rating}</p>
+      <h3 class="film-card__title">${title}</h3>
+      <p class="film-card__rating">${rating}</p>
       <p class="film-card__info">
-        <span class="film-card__year">${generateCard().info.year}</span>
-        <span class="film-card__duration">${generateCard().info.duration}</span>
-        <span class="film-card__genre">${generateCard().info.genre}</span>
+        <span class="film-card__year">${year}</span>
+        <span class="film-card__duration">${duration}</span>
+        <span class="film-card__genre">${genre}</span>
       </p>
-      <img src=${generateCard().posterSrc} alt="" class="film-card__poster">
-      <p class="film-card__description">${generateCard().description}</p>
-      <a class="film-card__comments">${generateCard().numberOfComments} comments</a>
+      <img src=${posterSrc} alt="" class="film-card__poster">
+      <p class="film-card__description">${description}</p>
+      <a class="film-card__comments">${numberOfComments} comments</a>
       <form class="film-card__controls">
         <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist">Add to watchlist</button>
         <button class="film-card__controls-item button film-card__controls-item--mark-as-watched film-card__controls-item--active">Mark as watched</button>
@@ -20,4 +20,11 @@ export const createFilmCardTemplate = () => {
       </form>
     </article>`
   );
+};
+
+
+export const createFilmCardTemplate = (cards) => {
+  const cardsMarkup = cards.map((it) => createFilmCardMarkup(it)).join(`\n`);
+
+  return (`${cardsMarkup}`);
 };

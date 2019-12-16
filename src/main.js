@@ -7,6 +7,13 @@ import {createNavigationTemplate} from './components/navigation.js';
 import {createSortTemplate} from './components/sort.js';
 import {createTopRatedTemplate} from './components/topRated.js';
 import {createUserRankTemplate} from './components/userRank.js';
+import {generateCards} from './mock/filmCard.js';
+import {generatePopup} from './mock/filmPopupInfo.js';
+
+let TASK_COUNT = 13;
+const cards = generateCards(TASK_COUNT);
+const cardsCopy = [...cards];
+const popupInfo = generatePopup();
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -24,24 +31,32 @@ const siteFilmsBlockElement = document.querySelector(`.films`);
 const siteFilmsListBlockElement = siteFilmsBlockElement.querySelector(`.films-list`);
 const siteCardsBlockElement = siteFilmsBlockElement.querySelector(`.films-list__container`);
 
-for (let i = 0; i < 5; i++) {
-  render(siteCardsBlockElement, createFilmCardTemplate(), `beforeend`);
+const renderCards = (count) => {
+  let cardsToRender = [];
+
+  for (let i = 0; i < count; i++) {
+    if (cards.length > 0) {
+      cardsToRender.push(cards.pop());
+    } else {
+      break;
+    }
+  }
+
+  render(siteCardsBlockElement, createFilmCardTemplate(cardsToRender), `beforeend`);
 }
+renderCards(5);
 
 render(siteFilmsListBlockElement, createBtnShowMoreTemplate(), `beforeend`);
 render(siteFilmsBlockElement, createTopRatedTemplate(), `beforeend`);
 render(siteFilmsBlockElement, createMostCommentedTemplate(), `beforeend`);
-render(siteMainElement, createFilmPopupInfoTemplate(), `beforeend`);
+render(siteMainElement, createFilmPopupInfoTemplate(popupInfo), `beforeend`);
 
-
-const cardsInFilmsList = document.querySelectorAll(`.films-list .film-card`);
-const cardsInFilmsListArr = [...cardsInFilmsList];
 const topRatedBlock = document.querySelector(`.films-list--extra:nth-of-type(2) .films-list__container`);
 const mostCommentedBlock = document.querySelector(`.films-list--extra:nth-of-type(3) .films-list__container`);
 
 const compareByComments = (a, b) => {
-  let commentsInA = a.querySelector(`.film-card__comments`).innerText.slice(0, -9);
-  let commentsInB = b.querySelector(`.film-card__comments`).innerText.slice(0, -9);
+  let commentsInA = a.numberOfComments;
+  let commentsInB = b.numberOfComments;
 
   if (+commentsInA > +commentsInB) {
     return -1;
@@ -53,8 +68,8 @@ const compareByComments = (a, b) => {
 };
 
 const compareByRating = (a, b) => {
-  let ratingOfA = a.querySelector(`.film-card__rating`).innerText;
-  let ratingOfB = b.querySelector(`.film-card__rating`).innerText;
+  let ratingOfA = a.rating;
+  let ratingOfB = b.rating;
 
   if (+ratingOfA > +ratingOfB) {
     return -1;
@@ -62,16 +77,13 @@ const compareByRating = (a, b) => {
   if (+ratingOfA < +ratingOfB) {
     return 1;
   }
-
   return 0;
 };
 
-cardsInFilmsListArr.sort(compareByRating);
-for (let i = 0; i < 2; i++) {
-  topRatedBlock.insertAdjacentElement(`beforeend`, cardsInFilmsListArr[i].cloneNode(true));
-}
+cardsCopy.sort(compareByRating);
+const topRatedToRender = cardsCopy.slice(0, 2);
+render(topRatedBlock, createFilmCardTemplate(topRatedToRender), `beforeend`);
 
-cardsInFilmsListArr.sort(compareByComments);
-for (let i = 0; i < 2; i++) {
-  mostCommentedBlock.insertAdjacentElement(`beforeend`, cardsInFilmsListArr[i].cloneNode(true));
-}
+cardsCopy.sort(compareByComments);
+const mostCommentedToRender = cardsCopy.slice(0, 2);
+render(mostCommentedBlock, createFilmCardTemplate(mostCommentedToRender), `beforeend`);

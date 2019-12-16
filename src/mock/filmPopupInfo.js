@@ -8,6 +8,7 @@ import {getDescription} from './filmCard.js';
 const generateComment = () => {
   return {
     text: DESCRIPTIONS[Math.floor(Math.random() * DESCRIPTIONS.length)],
+    author: TITLES[getRandomPosition(TITLES)],
     date: `2019/12/31 23:59`
   };
 };
