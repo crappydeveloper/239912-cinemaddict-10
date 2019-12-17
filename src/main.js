@@ -10,7 +10,8 @@ import {createUserRankTemplate} from './components/userRank.js';
 import {generateCards} from './mock/filmCard.js';
 import {generatePopup} from './mock/filmPopupInfo.js';
 
-let TASK_COUNT = 13;
+const TASK_COUNT = 13;
+const countToRender = 5;
 const cards = generateCards(TASK_COUNT);
 const cardsCopy = [...cards];
 const popupInfo = generatePopup();
@@ -31,7 +32,7 @@ const siteFilmsBlockElement = document.querySelector(`.films`);
 const siteFilmsListBlockElement = siteFilmsBlockElement.querySelector(`.films-list`);
 const siteCardsBlockElement = siteFilmsBlockElement.querySelector(`.films-list__container`);
 
-const renderCards = (count) => {
+const renderCards = (count = 1) => {
   let cardsToRender = [];
 
   for (let i = 0; i < count; i++) {
@@ -44,15 +45,28 @@ const renderCards = (count) => {
 
   render(siteCardsBlockElement, createFilmCardTemplate(cardsToRender), `beforeend`);
 };
-renderCards(5);
+renderCards(countToRender);
 
 render(siteFilmsListBlockElement, createBtnShowMoreTemplate(), `beforeend`);
 render(siteFilmsBlockElement, createTopRatedTemplate(), `beforeend`);
 render(siteFilmsBlockElement, createMostCommentedTemplate(), `beforeend`);
 render(siteMainElement, createFilmPopupInfoTemplate(popupInfo), `beforeend`);
 
+const btnShowMoreHandler = document.querySelector(`.films-list__show-more`);
 const topRatedBlock = document.querySelector(`.films-list--extra:nth-of-type(2) .films-list__container`);
 const mostCommentedBlock = document.querySelector(`.films-list--extra:nth-of-type(3) .films-list__container`);
+
+const clickBtnShowMoreHandler = () => {
+  for (let i = 0; i < countToRender; i++) {
+    renderCards();
+  }
+
+  if (cards.length === 0) {
+    btnShowMoreHandler.remove();
+  }
+};
+
+btnShowMoreHandler.addEventListener(`mousedown`, clickBtnShowMoreHandler);
 
 const compareByComments = (a, b) => {
   let commentsInA = a.numberOfComments;
