@@ -34,13 +34,11 @@ const siteCardsBlockElement = siteFilmsBlockElement.querySelector(`.films-list__
 
 const renderCards = (count = 1) => {
   let cardsToRender = [];
+  let i = 0;
 
-  for (let i = 0; i < count; i++) {
-    if (cards.length > 0) {
-      cardsToRender.push(cards.pop());
-    } else {
-      break;
-    }
+  while (cards.length > 0 && i < count) {
+    i++;
+    cardsToRender.push(cards.pop());
   }
 
   render(siteCardsBlockElement, createFilmCardTemplate(cardsToRender), `beforeend`);
@@ -72,10 +70,10 @@ const compareByComments = (a, b) => {
   let commentsInA = a.numberOfComments;
   let commentsInB = b.numberOfComments;
 
-  if (+commentsInA > +commentsInB) {
+  if (commentsInA > commentsInB) {
     return -1;
   }
-  if (+commentsInA < +commentsInB) {
+  if (commentsInA < commentsInB) {
     return 1;
   }
   return 0;
@@ -85,10 +83,10 @@ const compareByRating = (a, b) => {
   let ratingOfA = a.rating;
   let ratingOfB = b.rating;
 
-  if (+ratingOfA > +ratingOfB) {
+  if (ratingOfA > ratingOfB) {
     return -1;
   }
-  if (+ratingOfA < +ratingOfB) {
+  if (ratingOfA < ratingOfB) {
     return 1;
   }
   return 0;
