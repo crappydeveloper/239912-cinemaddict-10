@@ -70,26 +70,14 @@ const compareByComments = (a, b) => {
   let commentsInA = a.numberOfComments;
   let commentsInB = b.numberOfComments;
 
-  if (commentsInA > commentsInB) {
-    return -1;
-  }
-  if (commentsInA < commentsInB) {
-    return 1;
-  }
-  return 0;
+  return commentsInB - commentsInA;
 };
 
 const compareByRating = (a, b) => {
   let ratingOfA = a.rating;
   let ratingOfB = b.rating;
 
-  if (ratingOfA > ratingOfB) {
-    return -1;
-  }
-  if (ratingOfA < ratingOfB) {
-    return 1;
-  }
-  return 0;
+  return ratingOfB - ratingOfA;
 };
 
 cardsCopy.sort(compareByRating);
