@@ -1,3 +1,5 @@
+import {createElement} from '../utils.js';
+
 const createCommentMarkup = (comment) => {
   const {text, author, date} = comment;
 
@@ -18,8 +20,7 @@ const createCommentMarkup = (comment) => {
   );
 };
 
-
-export const createFilmPopupInfoTemplate = (popupInfo) => {
+const createFilmPopupInfoTemplate = (popupInfo) => {
   const {
     poster,
     minAge,
@@ -36,7 +37,6 @@ export const createFilmPopupInfoTemplate = (popupInfo) => {
     description,
     comments
   } = popupInfo;
-
   const commentsMarkup = comments.map((it) => createCommentMarkup(it)).join(`\n`);
 
   return (
@@ -160,3 +160,26 @@ export const createFilmPopupInfoTemplate = (popupInfo) => {
     </section>`
   );
 };
+
+export default class filmPopupInfo {
+  constructor(filmInfo) {
+    this._filmInfo = filmInfo;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmPopupInfoTemplate(this._filmInfo);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

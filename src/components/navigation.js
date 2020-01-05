@@ -1,6 +1,7 @@
 import {getStatistics} from '../mock/navigation.js';
+import {createElement} from '../utils.js';
 
-export const createNavigationTemplate = () => {
+const createNavigationTemplate = () => {
   return (
     `<nav class="main-navigation">
       <a href="#all" class="main-navigation__item main-navigation__item--active">All movies</a>
@@ -11,3 +12,24 @@ export const createNavigationTemplate = () => {
     </nav>`
   );
 };
+export default class Navigation {
+  constructor() {
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createNavigationTemplate();
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

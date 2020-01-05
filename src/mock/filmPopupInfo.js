@@ -1,9 +1,18 @@
 import {TITLES} from '../const.js';
 import {POSTERS} from '../const.js';
 import {DESCRIPTIONS} from '../const.js';
-import {getRandomPosition} from './filmCard.js';
-import {getDescription} from './filmCard.js';
 
+const getRandomPosition = (arr) => {
+  return Math.floor(Math.random() * arr.length);
+};
+
+const getDescription = () => {
+  let descriptionsCopy = Array.from(DESCRIPTIONS);
+
+  descriptionsCopy.length = getRandomPosition(descriptionsCopy) + 1;
+  descriptionsCopy = descriptionsCopy.join(` `);
+  return descriptionsCopy;
+};
 
 const generateComment = () => {
   return {
@@ -35,8 +44,14 @@ const generatePopup = () => {
     genres: [`Drama`, `Mystery`, `Comedy`],
     description: getDescription(),
     minAge: 18,
-    comments: generateComments(4)
+    comments: generateComments(Math.floor(Math.random() * 18))
   };
 };
 
-export {generatePopup};
+const generatePopups = (count) => {
+  return new Array(count)
+    .fill(``)
+    .map(generatePopup);
+};
+
+export {generatePopup, generatePopups};
