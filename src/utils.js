@@ -19,4 +19,5 @@ export const render = (container, element, place) => {
       container.append(element);
       break;
   }
+  return element;
 };

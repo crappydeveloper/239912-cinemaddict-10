@@ -7,11 +7,12 @@ import NavigationComponent from './components/navigation.js';
 import SortComponent from './components/sort.js';
 import TopRatedComponent from './components/topRated.js';
 import UserRankComponent from './components/userRank.js';
+import NoDataComponent from './components/noData.js';
 import {generatePopups} from './mock/filmPopupInfo.js';
 import {render, RenderPosition} from './utils.js';
 
-const TASK_COUNT = 13;
-const countToRender = 5;
+const TASK_COUNT = 0;
+const COUNT_TO_RENDER = 5;
 const cards = generatePopups(TASK_COUNT);
 const cardsCopy = [...cards];
 
@@ -21,84 +22,92 @@ const siteMainElement = document.querySelector(`.main`);
 render(siteHeaderElement, new UserRankComponent().getElement(), RenderPosition.BEFOREEND);
 render(siteMainElement, new NavigationComponent().getElement(), RenderPosition.BEFOREEND);
 render(siteMainElement, new SortComponent().getElement(), RenderPosition.BEFOREEND);
-render(siteMainElement, new FilmsSectionComponent().getElement(), RenderPosition.BEFOREEND);
+const siteFilmsBlockElement = render(siteMainElement, new FilmsSectionComponent().getElement(), RenderPosition.BEFOREEND);
 
-const siteFilmsBlockElement = document.querySelector(`.films`);
-const siteCardsBlockElement = siteFilmsBlockElement.querySelector(`.films-list__container`);
 const siteFilmsListBlockElement = siteFilmsBlockElement.querySelector(`.films-list`);
 
 const renderCard = (count = 1) => {
   let i = 0;
+  const getRenderedCards = () => siteFilmsListBlockElement.querySelectorAll(`.film-card`);
 
-  while (cards.length > 0 && i < count) {
-    const filmInfo = cards.pop();
+  if (cards.length > 0) {
+    const siteCardsBlockElement = siteFilmsListBlockElement.querySelector(`.films-list__container`);
 
-    const filmCardComponent = new FilmCardComponent(filmInfo);
-    const filmPopupInfoComponent = new FilmPopupInfoComponent(filmInfo);
+    while (i < count) {
+      const filmInfo = cards.pop();
 
-    const poster = filmCardComponent.getElement().querySelector(`.film-card__poster`);
-    const title = filmCardComponent.getElement().querySelector(`.film-card__title`);
-    const comments = filmCardComponent.getElement().querySelector(`.film-card__comments`);
-    [poster, title, comments].forEach((it) => {
-      it.addEventListener(`click`, () => {
-        render(siteMainElement, filmPopupInfoComponent.getElement(), RenderPosition.BEFOREEND);
+      const removePopup = () => {
+        siteMainElement.removeChild(filmPopupInfoComponent.getElement());
+      };
+
+      const escKeyDownHandler = (evt) => {
+        const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+        if (isEscKey) {
+          removePopup();
+          document.removeEventListener(`keydown`, escKeyDownHandler);
+        }
+      };
+
+      const filmCardComponent = new FilmCardComponent(filmInfo);
+      const filmPopupInfoComponent = new FilmPopupInfoComponent(filmInfo);
+
+      const poster = filmCardComponent.getElement().querySelector(`.film-card__poster`);
+      const title = filmCardComponent.getElement().querySelector(`.film-card__title`);
+      const comments = filmCardComponent.getElement().querySelector(`.film-card__comments`);
+
+      [poster, title, comments].forEach((it) => {
+        it.addEventListener(`click`, () => {
+          render(siteMainElement, filmPopupInfoComponent.getElement(), RenderPosition.BEFOREEND);
+          document.addEventListener(`keydown`, escKeyDownHandler);
+        });
       });
-    });
 
-    const popupButtonClose = filmPopupInfoComponent.getElement().querySelector(`.film-details__close-btn`);
-    popupButtonClose.addEventListener(`click`, () => {
-      filmPopupInfoComponent.getElement().remove();
-    });
+      const popupButtonClose = filmPopupInfoComponent.getElement().querySelector(`.film-details__close-btn`);
 
-    render(siteCardsBlockElement, filmCardComponent.getElement(), RenderPosition.BEFOREEND);
-    i++;
+      popupButtonClose.addEventListener(`click`, () => {
+        removePopup();
+      });
+
+      render(siteCardsBlockElement, filmCardComponent.getElement(), RenderPosition.BEFOREEND);
+      i++;
+    }
+  } else if (getRenderedCards().length === 0) {
+    siteMainElement.replaceChild(new NoDataComponent().getElement(), siteFilmsBlockElement);
   }
 };
+renderCard(COUNT_TO_RENDER);
 
-renderCard(countToRender);
+const btnShowMoreHandler = render(siteFilmsListBlockElement, new BtnShowMoreComponent().getElement(), RenderPosition.BEFOREEND);
+const topRatedBlock = render(siteFilmsBlockElement, new TopRatedComponent().getElement(), RenderPosition.BEFOREEND);
+const mostCommentedBlock = render(siteFilmsBlockElement, new MostCommentedComponent().getElement(), RenderPosition.BEFOREEND);
 
-render(siteFilmsListBlockElement, new BtnShowMoreComponent().getElement(), RenderPosition.BEFOREEND);
-render(siteFilmsBlockElement, new TopRatedComponent().getElement(), RenderPosition.BEFOREEND);
-render(siteFilmsBlockElement, new MostCommentedComponent().getElement(), RenderPosition.BEFOREEND);
-
-const btnShowMoreHandler = document.querySelector(`.films-list__show-more`);
-const topRatedBlock = document.querySelector(`.films-list--extra:nth-of-type(2) .films-list__container`);
-const mostCommentedBlock = document.querySelector(`.films-list--extra:nth-of-type(3) .films-list__container`);
+const topRatedContainer = topRatedBlock.querySelector(`.films-list__container`);
+const mostCommentedContainer = mostCommentedBlock.querySelector(`.films-list__container`);
 
 const clickBtnShowMoreHandler = () => {
-  for (let i = 0; i < countToRender; i++) {
+  for (let i = 0; i < COUNT_TO_RENDER; i++) {
     renderCard();
   }
 
-  if (cards.length === 0) {
+  if (cards === undefined || cards.length === 0) {
     btnShowMoreHandler.remove();
   }
 };
 
 btnShowMoreHandler.addEventListener(`mousedown`, clickBtnShowMoreHandler);
 
-const compareByComments = (a, b) => {
-  let commentsInA = a.comments.length;
-  let commentsInB = b.comments.length;
+const compareByComments = (a, b) => b.comments.length - a.comments.length;
 
-  return commentsInB - commentsInA;
-};
-
-const compareByRating = (a, b) => {
-  let ratingOfA = a.rating;
-  let ratingOfB = b.rating;
-
-  return ratingOfB - ratingOfA;
-};
+const compareByRating = (a, b) => b.rating - a.rating;
 
 cardsCopy.sort(compareByRating);
 const topRatedToRender = cardsCopy.slice(0, 2);
 for (let i = 0; i < 2; i++) {
-  render(topRatedBlock, new FilmCardComponent(topRatedToRender.pop()).getElement(), RenderPosition.BEFOREEND);
+  render(topRatedContainer, new FilmCardComponent(topRatedToRender.pop()).getElement(), RenderPosition.BEFOREEND);
 }
 
 cardsCopy.sort(compareByComments);
 const mostCommentedToRender = cardsCopy.slice(0, 2);
 for (let i = 0; i < 2; i++) {
-  render(mostCommentedBlock, new FilmCardComponent(mostCommentedToRender.pop()).getElement(), RenderPosition.BEFOREEND);
+  render(mostCommentedContainer, new FilmCardComponent(mostCommentedToRender.pop()).getElement(), RenderPosition.BEFOREEND);
 }
