@@ -11,7 +11,7 @@ import NoDataComponent from './components/noData.js';
 import {generatePopups} from './mock/filmPopupInfo.js';
 import {render, RenderPosition} from './utils.js';
 
-const TASK_COUNT = 0;
+const TASK_COUNT = 13;
 const COUNT_TO_RENDER = 5;
 const cards = generatePopups(TASK_COUNT);
 const cardsCopy = [...cards];
@@ -36,9 +36,8 @@ const renderCard = (count = 1) => {
     while (i < count) {
       const filmInfo = cards.pop();
 
-      const removePopup = () => {
-        siteMainElement.removeChild(filmPopupInfoComponent.getElement());
-      };
+      const removePopup = () => siteMainElement.removeChild(filmPopupInfoComponent.getElement());
+
 
       const escKeyDownHandler = (evt) => {
         const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
@@ -89,7 +88,7 @@ const clickBtnShowMoreHandler = () => {
     renderCard();
   }
 
-  if (cards === undefined || cards.length === 0) {
+  if (cards.length === 0) {
     btnShowMoreHandler.remove();
   }
 };
