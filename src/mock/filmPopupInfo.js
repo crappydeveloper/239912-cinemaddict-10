@@ -44,7 +44,8 @@ const generatePopup = () => {
     genres: [`Drama`, `Mystery`, `Comedy`],
     description: getDescription(),
     minAge: 18,
-    comments: generateComments(Math.floor(Math.random() * 18))
+    comments: generateComments(Math.floor(Math.random() * 18)),
+    isWatched: Math.random() > 0.5,
   };
 };
 
