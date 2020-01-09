@@ -1,19 +1,17 @@
+import AllFilmsComponent from '../components/allFilms.js';
+import FilmsListContainerComponent from '../components/filmsListContainer';
+import NoDataComponent from '../components/noData.js';
 import FilmCardComponent from '../components/filmCard.js';
 import FilmPopupInfoComponent from '../components/filmPopupInfo.js';
 import BtnShowMoreComponent from '../components/btnShowMore.js';
-import NoDataComponent from '../components/noData.js';
+import TopRatedComponent from '../components/topRated';
+import MostCommentedComponent from '../components/mostCommented';
 import {render, RenderPosition, remove} from '../utils/render.js';
 
 const SHOWING_CARDS_COUNT_ON_START = 5;
 const SHOWING_CARDS_COUNT_BY_BUTTON = 5;
 
-
-// renderCard() должен создавать компонент карточки (вешать листенеры и т.д.), как это делалось в renderCard, принимать должен не кол-во карт,
-// а cardListElement — ЭЛЕМЕНТ, куда отрисовывать, card — компонент карты
-// PageController.render() должен отрисовывать весь борд, принимать массив всех созданных карт cards,
-// в контейнер с помощью render отрисовывать cardListElement
-
-const renderCard = (cardListElement, card) => { //cardListElement — то, куда отрисовывать ЭЛЕМЕНТ, card — компонент карты
+const renderCard = (cardListElement, card) => {
   const escKeyDownHandler = (evt) => {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
@@ -25,13 +23,13 @@ const renderCard = (cardListElement, card) => { //cardListElement — то, ку
 
   const removePopup = () => {
     remove(filmPopupInfoComponent);
-  }
+  };
 
   const filmCardComponent = new FilmCardComponent(card);
   const filmPopupInfoComponent = new FilmPopupInfoComponent(card);
 
   filmCardComponent.setClickHandler(() => {
-    render(siteMainElement, filmPopupInfoComponent, RenderPosition.BEFOREEND);
+    render(cardListElement, filmPopupInfoComponent, RenderPosition.BEFOREEND);
     document.addEventListener(`keydown`, escKeyDownHandler);
   });
 
@@ -44,12 +42,14 @@ export default class PageController {
   constructor(container) {
     this._container = container;
 
+    this._allFilmsComponent = new AllFilmsComponent();
+    this._filmsListContainerComponent = new FilmsListContainerComponent();
     this._noDataComponent = new NoDataComponent();
-//    this._sortComponent = new SortComponent();
-//    this._tasksComponent = new TasksComponent();
     this._btnShowMoreComponent = new BtnShowMoreComponent();
-// разбить компонент с блоком отрисовки карточек на несколько
-// добавить сюда все. отрисовывать в render
+    this._topRatedComponent = new TopRatedComponent();
+    this._topRatedContainerComponent = new FilmsListContainerComponent();
+    this._mostCommentedComponent = new MostCommentedComponent();
+    this._mostCommentedContainerComponent = new FilmsListContainerComponent();
   }
 
   render(cards) {
@@ -61,10 +61,10 @@ export default class PageController {
       return;
     }
 
-    render(container, this._sortComponent, RenderPosition.BEFOREEND);
-    render(container, this._cardsComponent, RenderPosition.BEFOREEND);
+    render(container, this._allFilmsComponent, RenderPosition.BEFOREEND);
+    render(this._allFilmsComponent.getElement(), this._filmsListContainerComponent, RenderPosition.BEFOREEND);
 
-    const cardListElement = this._cardsComponent.getElement();
+    const cardListElement = this._filmsListContainerComponent.getElement();
 
     let showingCardsCount = SHOWING_CARDS_COUNT_ON_START;
     cards.slice(0, showingCardsCount)
@@ -75,17 +75,21 @@ export default class PageController {
     render(container, this._btnShowMoreComponent, RenderPosition.BEFOREEND);
 
     this._btnShowMoreComponent.setClickHandler(() => {
-      const clickBtnShowMoreHandler = () => {
-        const prevCardsCount = showingCardsCount;
-        showingCardsCount = showingCardsCount + SHOWING_CARDS_COUNT_BY_BUTTON;
+      const prevCardsCount = showingCardsCount;
+      showingCardsCount = showingCardsCount + SHOWING_CARDS_COUNT_BY_BUTTON;
 
-        cards.slice(prevCardsCount, showingCardsCount)
-          .forEach((card) => renderTask(cardListElement, card));
+      cards.slice(prevCardsCount, showingCardsCount)
+      .forEach((card) => renderCard(cardListElement, card));
 
-        if (showingCardsCount === cards.length) {
-          remove(this._btnShowMoreComponent);
-        }
-      };
-    })
+      if (showingCardsCount >= cards.length) {
+        remove(this._btnShowMoreComponent);
+      }
+    });
+
+    render(container, this._topRatedComponent, RenderPosition.BEFOREEND);
+    render(this._topRatedComponent.getElement(), this._topRatedContainerComponent, RenderPosition.BEFOREEND);
+
+    render(container, this._mostCommentedComponent, RenderPosition.BEFOREEND);
+    render(this._mostCommentedComponent.getElement(), this._mostCommentedComponent, RenderPosition.BEFOREEND);
   }
 }
