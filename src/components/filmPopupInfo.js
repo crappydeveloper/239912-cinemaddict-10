@@ -1,4 +1,4 @@
-import {createElement} from '../utils.js';
+import AbstractComponent from './abstractComponent.js';
 
 const createCommentMarkup = (comment) => {
   const {text, author, date} = comment;
@@ -161,25 +161,19 @@ const createFilmPopupInfoTemplate = (popupInfo) => {
   );
 };
 
-export default class filmPopupInfo {
+export default class filmPopupInfo extends AbstractComponent {
   constructor(filmInfo) {
+    super();
+
     this._filmInfo = filmInfo;
-    this._element = null;
   }
 
   getTemplate() {
     return createFilmPopupInfoTemplate(this._filmInfo);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  setButtonCloseClickHandler(handler) {
+    this.getElement().querySelector(`.film-details__close-btn`)
+      .addEventListener(`click`, handler);
   }
 }

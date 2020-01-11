@@ -1,5 +1,5 @@
 import {getStatistics} from '../mock/navigation.js';
-import {createElement} from '../utils.js';
+import AbstractComponent from './abstractComponent.js';
 
 const createNavigationTemplate = () => {
   return (
@@ -12,24 +12,9 @@ const createNavigationTemplate = () => {
     </nav>`
   );
 };
-export default class Navigation {
-  constructor() {
-    this._element = null;
-  }
 
+export default class Navigation extends AbstractComponent {
   getTemplate() {
     return createNavigationTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
