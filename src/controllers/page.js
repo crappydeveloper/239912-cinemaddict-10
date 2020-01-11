@@ -38,6 +38,12 @@ const renderCard = (cardListElement, card) => {
   render(cardListElement, filmCardComponent, RenderPosition.BEFOREEND);
 };
 
+const renderCards = (cardListElement, cards) => {
+  cards.forEach((card) => {
+    renderCard(cardListElement, card);
+  });
+};
+
 export default class PageController {
   constructor(container) {
     this._container = container;
@@ -55,6 +61,21 @@ export default class PageController {
   render(cards) {
     const container = this._container.getElement();
     const isAllCardsWatched = cards.every((card) => card.isWatched);
+    let cardsCopy = [...cards];
+
+    const renderTopRatedCards = () => {
+      const compareByRating = (a, b) => b.rating - a.rating;
+
+      cardsCopy.sort(compareByRating);
+      renderCards(this._topRatedContainerComponent.getElement(), cardsCopy.slice(0, 2));
+    };
+
+    const renderMostCommentedCards = () => {
+      const compareByComments = (a, b) => b.comments.length - a.comments.length;
+
+      cardsCopy.sort(compareByComments);
+      renderCards(this._mostCommentedContainerComponent.getElement(), cardsCopy.slice(0, 2));
+    };
 
     if (isAllCardsWatched) {
       render(container, this._noDataComponent, RenderPosition.BEFOREEND);
@@ -65,21 +86,16 @@ export default class PageController {
     render(this._allFilmsComponent.getElement(), this._filmsListContainerComponent, RenderPosition.BEFOREEND);
 
     const cardListElement = this._filmsListContainerComponent.getElement();
-
     let showingCardsCount = SHOWING_CARDS_COUNT_ON_START;
-    cards.slice(0, showingCardsCount)
-      .forEach((card) => {
-        renderCard(cardListElement, card);
-      });
+
+    renderCards(cardListElement, cards.slice(0, showingCardsCount));
 
     render(container, this._btnShowMoreComponent, RenderPosition.BEFOREEND);
 
     this._btnShowMoreComponent.setClickHandler(() => {
       const prevCardsCount = showingCardsCount;
       showingCardsCount = showingCardsCount + SHOWING_CARDS_COUNT_BY_BUTTON;
-
-      cards.slice(prevCardsCount, showingCardsCount)
-      .forEach((card) => renderCard(cardListElement, card));
+      renderCards(cardListElement, cards.slice(prevCardsCount, showingCardsCount));
 
       if (showingCardsCount >= cards.length) {
         remove(this._btnShowMoreComponent);
@@ -88,8 +104,10 @@ export default class PageController {
 
     render(container, this._topRatedComponent, RenderPosition.BEFOREEND);
     render(this._topRatedComponent.getElement(), this._topRatedContainerComponent, RenderPosition.BEFOREEND);
+    renderTopRatedCards();
 
     render(container, this._mostCommentedComponent, RenderPosition.BEFOREEND);
-    render(this._mostCommentedComponent.getElement(), this._mostCommentedComponent, RenderPosition.BEFOREEND);
+    render(this._mostCommentedComponent.getElement(), this._mostCommentedContainerComponent, RenderPosition.BEFOREEND);
+    renderMostCommentedCards();
   }
 }
