@@ -1,3 +1,4 @@
+import {formatDate} from '../utils/common.js';
 import AbstractComponent from './abstractComponent.js';
 
 const createCommentMarkup = (comment) => {
@@ -38,6 +39,7 @@ const createFilmPopupInfoTemplate = (popupInfo) => {
     comments
   } = popupInfo;
   const commentsMarkup = comments.map((it) => createCommentMarkup(it)).join(`\n`);
+  const formatedReleaseDate = formatDate(releaseDate);
 
   return (
     `<section class="film-details">
@@ -80,7 +82,7 @@ const createFilmPopupInfoTemplate = (popupInfo) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Release Date</td>
-                  <td class="film-details__cell">${releaseDate}</td>
+                  <td class="film-details__cell">${formatedReleaseDate}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Runtime</td>
