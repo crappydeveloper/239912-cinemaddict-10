@@ -1,6 +1,5 @@
 import UserRankComponent from './components/userRank.js';
 import NavigationComponent from './components/navigation.js';
-import SortComponent from './components/sort.js';
 import FilmsSectionComponent from './components/filmsSection.js';
 import PageController from './controllers/page.js';
 import {generatePopups} from './mock/filmPopupInfo.js';
@@ -14,7 +13,6 @@ const siteMainElement = document.querySelector(`.main`);
 
 render(siteHeaderElement, new UserRankComponent(), RenderPosition.BEFOREEND);
 render(siteMainElement, new NavigationComponent(), RenderPosition.BEFOREEND);
-render(siteMainElement, new SortComponent(), RenderPosition.BEFOREEND);
 
 const pageComponent = new FilmsSectionComponent();
 render(siteMainElement, pageComponent, RenderPosition.BEFOREEND);

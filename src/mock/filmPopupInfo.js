@@ -14,6 +14,14 @@ const getDescription = () => {
   return descriptionsCopy;
 };
 
+const getRandomDate = () => {
+  const targetDate = new Date();
+
+  targetDate.setDate(targetDate.getDate() - Math.random() * 20000);
+
+  return targetDate;
+};
+
 const generateComment = () => {
   return {
     text: DESCRIPTIONS[Math.floor(Math.random() * DESCRIPTIONS.length)],
@@ -38,7 +46,7 @@ const generatePopup = () => {
     author: `Vasiliy Pupkin`,
     writers: [`Л.Н.Толстой`, `А.С.Пушкин`],
     actors: [`Christoph Waltz`, `Jeffrey Leon Bridges`],
-    releaseDate: `10 February 1337`,
+    releaseDate: getRandomDate(),
     runtime: `2h 28m`,
     country: `USA`,
     genres: [`Drama`, `Mystery`, `Comedy`],

@@ -1,3 +1,4 @@
+import SortComponent, {SortType} from '../components/sort.js';
 import AllFilmsComponent from '../components/allFilms.js';
 import FilmsListContainerComponent from '../components/filmsListContainer';
 import NoDataComponent from '../components/noData.js';
@@ -48,6 +49,7 @@ export default class PageController {
   constructor(container) {
     this._container = container;
 
+    this._sortComponent = new SortComponent();
     this._allFilmsComponent = new AllFilmsComponent();
     this._filmsListContainerComponent = new FilmsListContainerComponent();
     this._noDataComponent = new NoDataComponent();
@@ -62,6 +64,25 @@ export default class PageController {
     const container = this._container.getElement();
     const isAllCardsWatched = cards.every((card) => card.isWatched);
     let cardsCopy = [...cards];
+
+    const renderLoadMoreButton = (containerElement = container, position = RenderPosition.BEFOREEND) => { // кажется мне, что аргументы — это костыль
+      if (showingCardsCount >= cards.length) {
+        return;
+      }
+
+      render(containerElement, this._btnShowMoreComponent, position);
+
+      this._btnShowMoreComponent.setClickHandler(() => {
+        const prevCardsCount = showingCardsCount;
+        showingCardsCount = showingCardsCount + SHOWING_CARDS_COUNT_BY_BUTTON;
+
+        renderCards(cardListElement, cards.slice(prevCardsCount, showingCardsCount));
+
+        if (showingCardsCount >= cards.length) {
+          remove(this._btnShowMoreComponent);
+        }
+      });
+    };
 
     const renderTopRatedCards = () => {
       const compareByRating = (a, b) => b.rating - a.rating;
@@ -82,6 +103,8 @@ export default class PageController {
       return;
     }
 
+    render(container, this._sortComponent, RenderPosition.BEFOREBEGIN);
+
     render(container, this._allFilmsComponent, RenderPosition.BEFOREEND);
     render(this._allFilmsComponent.getElement(), this._filmsListContainerComponent, RenderPosition.BEFOREEND);
 
@@ -90,17 +113,7 @@ export default class PageController {
 
     renderCards(cardListElement, cards.slice(0, showingCardsCount));
 
-    render(container, this._btnShowMoreComponent, RenderPosition.BEFOREEND);
-
-    this._btnShowMoreComponent.setClickHandler(() => {
-      const prevCardsCount = showingCardsCount;
-      showingCardsCount = showingCardsCount + SHOWING_CARDS_COUNT_BY_BUTTON;
-      renderCards(cardListElement, cards.slice(prevCardsCount, showingCardsCount));
-
-      if (showingCardsCount >= cards.length) {
-        remove(this._btnShowMoreComponent);
-      }
-    });
+    renderLoadMoreButton();
 
     render(container, this._topRatedComponent, RenderPosition.BEFOREEND);
     render(this._topRatedComponent.getElement(), this._topRatedContainerComponent, RenderPosition.BEFOREEND);
@@ -109,5 +122,31 @@ export default class PageController {
     render(container, this._mostCommentedComponent, RenderPosition.BEFOREEND);
     render(this._mostCommentedComponent.getElement(), this._mostCommentedContainerComponent, RenderPosition.BEFOREEND);
     renderMostCommentedCards();
+
+    this._sortComponent.setSortTypeChangeHandler((sortType) => {
+      let sortedCards = [];
+
+      switch (sortType) {
+        case SortType.DATE:
+          sortedCards = cards.slice().sort((a, b) => b.releaseDate - a.releaseDate);
+          break;
+        case SortType.RATING:
+          sortedCards = cards.slice().sort((a, b) => b.rating - a.rating);
+          break;
+        case SortType.DEFAULT:
+          sortedCards = cards.slice(0, showingCardsCount);
+          break;
+      }
+
+      cardListElement.innerHTML = ``;
+
+      renderCards(cardListElement, sortedCards);
+
+      if (sortType === SortType.DEFAULT) {
+        renderLoadMoreButton(this._topRatedComponent.getElement(), RenderPosition.BEFOREBEGIN); // кажется мне, что это костыль
+      } else {
+        remove(this._btnShowMoreComponent);
+      }
+    });
   }
 }
