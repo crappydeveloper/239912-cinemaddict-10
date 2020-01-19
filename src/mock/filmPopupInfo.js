@@ -54,6 +54,9 @@ const generatePopup = () => {
     minAge: 18,
     comments: generateComments(Math.floor(Math.random() * 18)),
     isWatched: Math.random() > 0.5,
+    watchlist: false,
+    already_watched: true,
+    favorite: false
   };
 };
 

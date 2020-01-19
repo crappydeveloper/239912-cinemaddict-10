@@ -8,6 +8,7 @@ import BtnShowMoreComponent from '../components/btnShowMore.js';
 import TopRatedComponent from '../components/topRated';
 import MostCommentedComponent from '../components/mostCommented';
 import {render, RenderPosition, remove} from '../utils/render.js';
+import MovieController from './movie.js'; //1. Подключается MovieController
 
 const SHOWING_CARDS_COUNT_ON_START = 5;
 const SHOWING_CARDS_COUNT_BY_BUTTON = 5;
@@ -32,9 +33,8 @@ const renderCard = (cardListElement, card) => {
   filmCardComponent.setClickHandler(() => {
     render(cardListElement, filmPopupInfoComponent, RenderPosition.BEFOREEND);
     document.addEventListener(`keydown`, escKeyDownHandler);
+    filmPopupInfoComponent.setButtonCloseClickHandler(removePopup);
   });
-
-  filmPopupInfoComponent.setButtonCloseClickHandler(removePopup);
 
   render(cardListElement, filmCardComponent, RenderPosition.BEFOREEND);
 };
@@ -49,6 +49,7 @@ export default class PageController {
   constructor(container) {
     this._container = container;
 
+    this._cards = [];
     this._sortComponent = new SortComponent();
     this._allFilmsComponent = new AllFilmsComponent();
     this._filmsListContainerComponent = new FilmsListContainerComponent();
@@ -58,9 +59,13 @@ export default class PageController {
     this._topRatedContainerComponent = new FilmsListContainerComponent();
     this._mostCommentedComponent = new MostCommentedComponent();
     this._mostCommentedContainerComponent = new FilmsListContainerComponent();
+
+    // this._creatingMovie = null; 2. В св-во записывается нулевое значение
   }
 
   render(cards) {
+    this._cards = cards;
+
     const container = this._container.getElement();
     const isAllCardsWatched = cards.every((card) => card.isWatched);
     let cardsCopy = [...cards];
@@ -148,5 +153,19 @@ export default class PageController {
         remove(this._btnShowMoreComponent);
       }
     });
+  }
+
+  _onDataChange(movieController, oldData, newData) { // описана ф-ия должна быть тут. Передаваться в этом контроллере в рендеры карт
+    /*
+    const index = this._cards.findIndex((it) => it === oldData); // находим индекс старой карточки (той, на которой был клик) в массиве карт
+
+    if (index === -1) { // если не нашли такую карточку в исходном массиве, то вырубаем ф-ию
+      return;
+    }
+
+    this._cards = [].concat(this._cards.slice(0, index), newData, this._cards.slice(index + 1)); // ЕСЛИ НАШЛИ, то в _cards меняем старую карточку на новую
+
+    movieController.render(this._cards[index]); // рендерим эту самую новую карточку
+  */
   }
 }
