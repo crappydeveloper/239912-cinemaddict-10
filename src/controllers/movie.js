@@ -31,51 +31,66 @@ export default class MovieController {
     this._filmCardComponent = new FilmCardComponent(card);
     this._filmPopupInfoComponent = new FilmPopupInfoComponent(card);
 
-    /*
-      const escKeyDownHandler = (evt) => {
-        const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+    const escKeyDownHandler = (evt) => {
+      const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+      if (isEscKey) {
+        removePopup();
+        document.removeEventListener(`keydown`, escKeyDownHandler);
+      }
+    };
 
-        if (isEscKey) {
-          removePopup();
-          document.removeEventListener(`keydown`, escKeyDownHandler);
-        }
-      };
+    const removePopup = () => {
+      remove(filmPopupInfoComponent);
+    };
 
-      const removePopup = () => {
-        remove(filmPopupInfoComponent);
-      };
+    this._filmCardComponent.setClickHandler(() => {
+      render(container, filmPopupInfoComponent, RenderPosition.BEFOREEND);
+      document.addEventListener(`keydown`, escKeyDownHandler);
+      filmPopupInfoComponent.setButtonCloseClickHandler(removePopup);
+    });
 
-      const filmCardComponent = new FilmCardComponent(card);
-      const filmPopupInfoComponent = new FilmPopupInfoComponent(card);
+    this._filmCardComponent.setAddToWatchlistButtonClickHandler(() => {
+      this._onDataChange(this, card, Object.assign({}, card, {
+        watchlist: !card.watchlist,
+      }));
+    });
 
-      this._filmCardComponent.setClickHandler(() => {
-        render(container, filmPopupInfoComponent, RenderPosition.BEFOREEND);
-        document.addEventListener(`keydown`, escKeyDownHandler);
-        filmPopupInfoComponent.setButtonCloseClickHandler(removePopup);
-      });
+    this._filmCardComponent.setAlreadyWatchedButtonClickHandler(() => {
+      this._onDataChange(this, card, Object.assign({}, card, {
+        already_watched: !card.already_watched,
+      }));
+    });
 
-      this._filmCardComponent.setAddToWatchlistButtonClickHandler(() => {
-        this._onDataChange(oldCard, newCard);
-      });
-      this._filmCardComponent.setAlreadyWatchedButtonClickHandler(() => {
-        this._onDataChange(oldCard, newCard);
-      });
-      this._filmCardComponent.setAddToFavoritesButtonClickHandler(() => {
-        this._onDataChange(oldCard, newCard);
-      });
-      this._filmPopupInfoComponent.setAddToWatchlistButtonClickHandler(() => {
-        this._onDataChange(oldCard, newCard);
-      });
-      this._filmPopupInfoComponent.setAlreadyWatchedButtonClickHandler(() => {
-        this._onDataChange(oldCard, newCard);
-      });
-      this._filmPopupInfoComponent.setAddToFavoritesButtonClickHandler(() => {
-        this._onDataChange(oldCard, newCard);
-      });
+    this._filmCardComponent.setAddToFavoritesButtonClickHandler(() => {
+      this._onDataChange(this, card, Object.assign({}, card, {
+        favorite: !card.favorite,
+      }));
+    });
 
-      render(container, filmCardComponent, RenderPosition.BEFOREEND);
-    */
-    // данные в components/...
+    this._filmPopupInfoComponent.setAddToWatchlistButtonClickHandler(() => {
+      this._onDataChange(this, card, Object.assign({}, card, {
+        watchlist: !card.watchlist,
+      }));
+    });
+
+    this._filmPopupInfoComponent.setAlreadyWatchedButtonClickHandler(() => {
+      this._onDataChange(this, card, Object.assign({}, card, {
+        already_watched: !card.already_watched,
+      }));
+    });
+
+    this._filmPopupInfoComponent.setAddToFavoritesButtonClickHandler(() => {
+      this._onDataChange(this, card, Object.assign({}, card, {
+        favorite: !card.favorite,
+      }));
+    });
+    
+    if (oldFilmCardComponent && oldFilmPopupInfoComponent) {
+      replace(this._taskComponent, oldTaskComponent); // переделать
+      replace(this._taskEditComponent, oldTaskEditComponent); // переделать
+    } else {
+      render(this._container, this._filmCardComponent, RenderPosition.BEFOREEND);
+    }
   }
 
   removePopup() {

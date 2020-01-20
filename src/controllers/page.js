@@ -13,7 +13,7 @@ import MovieController from './movie.js'; //1. Подключается MovieCon
 const SHOWING_CARDS_COUNT_ON_START = 5;
 const SHOWING_CARDS_COUNT_BY_BUTTON = 5;
 
-const renderCard = (cardListElement, card) => {
+/*const renderCard = (cardListElement, card) => {
   const escKeyDownHandler = (evt) => {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
@@ -38,10 +38,20 @@ const renderCard = (cardListElement, card) => {
 
   render(cardListElement, filmCardComponent, RenderPosition.BEFOREEND);
 };
-
+*/
+/*
 const renderCards = (cardListElement, cards) => {
   cards.forEach((card) => {
     renderCard(cardListElement, card);
+  });
+};
+*/
+const renderCards = (cardListElement, cards, onDataChange) => {
+  return cards.map((card) => {
+    const movieController = new MovieController(cardListElement, onDataChange);
+    movieController.render(card);
+
+    return movieController;
   });
 };
 
@@ -156,7 +166,6 @@ export default class PageController {
   }
 
   _onDataChange(movieController, oldData, newData) { // описана ф-ия должна быть тут. Передаваться в этом контроллере в рендеры карт
-    /*
     const index = this._cards.findIndex((it) => it === oldData); // находим индекс старой карточки (той, на которой был клик) в массиве карт
 
     if (index === -1) { // если не нашли такую карточку в исходном массиве, то вырубаем ф-ию
@@ -166,6 +175,5 @@ export default class PageController {
     this._cards = [].concat(this._cards.slice(0, index), newData, this._cards.slice(index + 1)); // ЕСЛИ НАШЛИ, то в _cards меняем старую карточку на новую
 
     movieController.render(this._cards[index]); // рендерим эту самую новую карточку
-  */
   }
 }
