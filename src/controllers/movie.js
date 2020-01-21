@@ -1,27 +1,16 @@
 import NoDataComponent from '../components/noData.js';
 import FilmCardComponent from '../components/filmCard.js';
 import FilmPopupInfoComponent from '../components/filmPopupInfo.js';
-import {render, RenderPosition, remove} from '../utils/render.js';
-
-/*
-const Mode = {
-  DEFAULT: `default`,
-  POPUP: `popup`,
-};
-*/
+import {render, RenderPosition, remove, replace} from '../utils/render.js';
 
 export default class MovieController {
   constructor(container, onDataChange) {
-    this._container = container; //тут сделано как в Академии
+    this._container = container;
     this._onDataChange = onDataChange;
     this._noDataComponent = new NoDataComponent();
 
-    //this._mode = Mode.DEFAULT;
-
     this._filmCardComponent = null;
     this._filmPopupInfoComponent = null;
-
-    //this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
 
   render(card) {
@@ -40,13 +29,13 @@ export default class MovieController {
     };
 
     const removePopup = () => {
-      remove(filmPopupInfoComponent);
+      remove(this._filmPopupInfoComponent);
     };
 
     this._filmCardComponent.setClickHandler(() => {
-      render(container, filmPopupInfoComponent, RenderPosition.BEFOREEND);
+      render(this._container, this._filmPopupInfoComponent, RenderPosition.BEFOREEND);
       document.addEventListener(`keydown`, escKeyDownHandler);
-      filmPopupInfoComponent.setButtonCloseClickHandler(removePopup);
+      this._filmPopupInfoComponent.setButtonCloseClickHandler(removePopup);
     });
 
     this._filmCardComponent.setAddToWatchlistButtonClickHandler(() => {
@@ -57,7 +46,7 @@ export default class MovieController {
 
     this._filmCardComponent.setAlreadyWatchedButtonClickHandler(() => {
       this._onDataChange(this, card, Object.assign({}, card, {
-        already_watched: !card.already_watched,
+        alreadyWatched: !card.alreadyWatched,
       }));
     });
 
@@ -75,7 +64,7 @@ export default class MovieController {
 
     this._filmPopupInfoComponent.setAlreadyWatchedButtonClickHandler(() => {
       this._onDataChange(this, card, Object.assign({}, card, {
-        already_watched: !card.already_watched,
+        alreadyWatched: !card.alreadyWatched,
       }));
     });
 
@@ -84,26 +73,16 @@ export default class MovieController {
         favorite: !card.favorite,
       }));
     });
-    
+
     if (oldFilmCardComponent && oldFilmPopupInfoComponent) {
-      replace(this._taskComponent, oldTaskComponent); // переделать
-      replace(this._taskEditComponent, oldTaskEditComponent); // переделать
+      replace(this._filmCardComponent, oldFilmCardComponent);
+      replace(this._filmPopupInfoComponent, oldFilmPopupInfoComponent);
     } else {
       render(this._container, this._filmCardComponent, RenderPosition.BEFOREEND);
     }
   }
 
   removePopup() {
-    remove(filmPopupInfoComponent);
+    remove(this._filmPopupInfoComponent);
   }
-
-  escKeyDownHandler(evt) {
-    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-
-    if (isEscKey) {
-      removePopup();
-      document.removeEventListener(`keydown`, escKeyDownHandler);
-    }
-  }
-
 }

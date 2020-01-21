@@ -2,50 +2,15 @@ import SortComponent, {SortType} from '../components/sort.js';
 import AllFilmsComponent from '../components/allFilms.js';
 import FilmsListContainerComponent from '../components/filmsListContainer';
 import NoDataComponent from '../components/noData.js';
-import FilmCardComponent from '../components/filmCard.js';
-import FilmPopupInfoComponent from '../components/filmPopupInfo.js';
 import BtnShowMoreComponent from '../components/btnShowMore.js';
 import TopRatedComponent from '../components/topRated';
 import MostCommentedComponent from '../components/mostCommented';
 import {render, RenderPosition, remove} from '../utils/render.js';
-import MovieController from './movie.js'; //1. Подключается MovieController
+import MovieController from './movie.js';
 
 const SHOWING_CARDS_COUNT_ON_START = 5;
 const SHOWING_CARDS_COUNT_BY_BUTTON = 5;
 
-/*const renderCard = (cardListElement, card) => {
-  const escKeyDownHandler = (evt) => {
-    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-
-    if (isEscKey) {
-      removePopup();
-      document.removeEventListener(`keydown`, escKeyDownHandler);
-    }
-  };
-
-  const removePopup = () => {
-    remove(filmPopupInfoComponent);
-  };
-
-  const filmCardComponent = new FilmCardComponent(card);
-  const filmPopupInfoComponent = new FilmPopupInfoComponent(card);
-
-  filmCardComponent.setClickHandler(() => {
-    render(cardListElement, filmPopupInfoComponent, RenderPosition.BEFOREEND);
-    document.addEventListener(`keydown`, escKeyDownHandler);
-    filmPopupInfoComponent.setButtonCloseClickHandler(removePopup);
-  });
-
-  render(cardListElement, filmCardComponent, RenderPosition.BEFOREEND);
-};
-*/
-/*
-const renderCards = (cardListElement, cards) => {
-  cards.forEach((card) => {
-    renderCard(cardListElement, card);
-  });
-};
-*/
 const renderCards = (cardListElement, cards, onDataChange) => {
   return cards.map((card) => {
     const movieController = new MovieController(cardListElement, onDataChange);
@@ -70,7 +35,7 @@ export default class PageController {
     this._mostCommentedComponent = new MostCommentedComponent();
     this._mostCommentedContainerComponent = new FilmsListContainerComponent();
 
-    // this._creatingMovie = null; 2. В св-во записывается нулевое значение
+    this._onDataChange = this._onDataChange.bind(this);
   }
 
   render(cards) {
@@ -91,7 +56,7 @@ export default class PageController {
         const prevCardsCount = showingCardsCount;
         showingCardsCount = showingCardsCount + SHOWING_CARDS_COUNT_BY_BUTTON;
 
-        renderCards(cardListElement, cards.slice(prevCardsCount, showingCardsCount));
+        renderCards(cardListElement, cards.slice(prevCardsCount, showingCardsCount), this._onDataChange);
 
         if (showingCardsCount >= cards.length) {
           remove(this._btnShowMoreComponent);
@@ -103,14 +68,14 @@ export default class PageController {
       const compareByRating = (a, b) => b.rating - a.rating;
 
       cardsCopy.sort(compareByRating);
-      renderCards(this._topRatedContainerComponent.getElement(), cardsCopy.slice(0, 2));
+      renderCards(this._topRatedContainerComponent.getElement(), cardsCopy.slice(0, 2), this._onDataChange);
     };
 
     const renderMostCommentedCards = () => {
       const compareByComments = (a, b) => b.comments.length - a.comments.length;
 
       cardsCopy.sort(compareByComments);
-      renderCards(this._mostCommentedContainerComponent.getElement(), cardsCopy.slice(0, 2));
+      renderCards(this._mostCommentedContainerComponent.getElement(), cardsCopy.slice(0, 2), this._onDataChange);
     };
 
     if (isAllCardsWatched) {
@@ -126,7 +91,7 @@ export default class PageController {
     const cardListElement = this._filmsListContainerComponent.getElement();
     let showingCardsCount = SHOWING_CARDS_COUNT_ON_START;
 
-    renderCards(cardListElement, cards.slice(0, showingCardsCount));
+    renderCards(cardListElement, cards.slice(0, showingCardsCount), this._onDataChange);
 
     renderLoadMoreButton();
 
@@ -155,7 +120,7 @@ export default class PageController {
 
       cardListElement.innerHTML = ``;
 
-      renderCards(cardListElement, sortedCards);
+      renderCards(cardListElement, sortedCards, this._onDataChange);
 
       if (sortType === SortType.DEFAULT) {
         renderLoadMoreButton(this._topRatedComponent.getElement(), RenderPosition.BEFOREBEGIN); // кажется мне, что это костыль
@@ -165,15 +130,15 @@ export default class PageController {
     });
   }
 
-  _onDataChange(movieController, oldData, newData) { // описана ф-ия должна быть тут. Передаваться в этом контроллере в рендеры карт
-    const index = this._cards.findIndex((it) => it === oldData); // находим индекс старой карточки (той, на которой был клик) в массиве карт
+  _onDataChange(movieController, oldData, newData) {
+    const index = this._cards.findIndex((it) => it === oldData);
 
-    if (index === -1) { // если не нашли такую карточку в исходном массиве, то вырубаем ф-ию
+    if (index === -1) {
       return;
     }
 
-    this._cards = [].concat(this._cards.slice(0, index), newData, this._cards.slice(index + 1)); // ЕСЛИ НАШЛИ, то в _cards меняем старую карточку на новую
+    this._cards = [].concat(this._cards.slice(0, index), newData, this._cards.slice(index + 1));
 
-    movieController.render(this._cards[index]); // рендерим эту самую новую карточку
+    movieController.render(this._cards[index]);
   }
 }
