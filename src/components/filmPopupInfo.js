@@ -1,5 +1,5 @@
 import {formatDate} from '../utils/common.js';
-import AbstractComponent from './abstractComponent.js';
+import AbstractSmartComponent from './abstractSmartComponent.js';
 
 const createCommentMarkup = (comment) => {
   const {text, author, date} = comment;
@@ -163,11 +163,15 @@ const createFilmPopupInfoTemplate = (popupInfo) => {
   );
 };
 
-export default class filmPopupInfo extends AbstractComponent {
+export default class filmPopupInfo extends AbstractSmartComponent {
   constructor(filmInfo) {
     super();
 
     this._filmInfo = filmInfo;
+  }
+
+  recoveryListeners() {
+    
   }
 
   getTemplate() {

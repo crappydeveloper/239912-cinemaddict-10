@@ -1,6 +1,7 @@
 import NoDataComponent from '../components/noData.js';
 import FilmCardComponent from '../components/filmCard.js';
 import FilmPopupInfoComponent from '../components/filmPopupInfo.js';
+// import LeftRatingComponent from '../components/leftRating.js';
 import {render, RenderPosition, remove, replace} from '../utils/render.js';
 
 export default class MovieController {
@@ -19,6 +20,7 @@ export default class MovieController {
 
     this._filmCardComponent = new FilmCardComponent(card);
     this._filmPopupInfoComponent = new FilmPopupInfoComponent(card);
+    // this._leftRatingComponent = new LeftRatingComponent(card);
 
     const escKeyDownHandler = (evt) => {
       const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
