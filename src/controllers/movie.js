@@ -1,7 +1,8 @@
 import NoDataComponent from '../components/noData.js';
 import FilmCardComponent from '../components/filmCard.js';
 import FilmPopupInfoComponent from '../components/filmPopupInfo.js';
-// import LeftRatingComponent from '../components/leftRating.js';
+import FilmPopupMiddleContainer from '../components/filmPopupMiddleContainer.js';
+import FilmPopupUserRatingComponent from '../components/filmPopupUserRating.js';
 import {render, RenderPosition, remove, replace} from '../utils/render.js';
 
 export default class MovieController {
@@ -9,9 +10,11 @@ export default class MovieController {
     this._container = container;
     this._onDataChange = onDataChange;
     this._noDataComponent = new NoDataComponent();
+    this._filmPopupMiddleContainer = new FilmPopupMiddleContainer();
 
     this._filmCardComponent = null;
     this._filmPopupInfoComponent = null;
+    this._filmPopupUserRatingComponent = null;
   }
 
   render(card) {
@@ -20,7 +23,7 @@ export default class MovieController {
 
     this._filmCardComponent = new FilmCardComponent(card);
     this._filmPopupInfoComponent = new FilmPopupInfoComponent(card);
-    // this._leftRatingComponent = new LeftRatingComponent(card);
+    this._filmPopupUserRatingComponent = new FilmPopupUserRatingComponent(card);
 
     const escKeyDownHandler = (evt) => {
       const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
@@ -32,6 +35,13 @@ export default class MovieController {
 
     const removePopup = () => {
       remove(this._filmPopupInfoComponent);
+    };
+
+    const showRankSetterBlock = () => {
+      const filmPopupTopContainer = this._filmPopupInfoComponent.getElement().querySelector(`.form-details__top-container`);
+
+      render(filmPopupTopContainer, this._filmPopupMiddleContainer, RenderPosition.AFTEREND);
+      render(this._filmPopupMiddleContainer.getElement(), this._filmPopupUserRatingComponent, RenderPosition.BEFOREEND);
     };
 
     this._filmCardComponent.setClickHandler(() => {
@@ -50,6 +60,15 @@ export default class MovieController {
       this._onDataChange(this, card, Object.assign({}, card, {
         alreadyWatched: !card.alreadyWatched,
       }));
+
+      if (card.alreadyWatched) {
+        render(this._container, this._filmPopupInfoComponent, RenderPosition.BEFOREEND);
+        document.addEventListener(`keydown`, escKeyDownHandler);
+        this._filmPopupInfoComponent.setButtonCloseClickHandler(removePopup);
+        showRankSetterBlock();
+      } else {
+        remove(this._filmPopupMiddleContainer);
+      }
     });
 
     this._filmCardComponent.setAddToFavoritesButtonClickHandler(() => {
@@ -68,6 +87,12 @@ export default class MovieController {
       this._onDataChange(this, card, Object.assign({}, card, {
         alreadyWatched: !card.alreadyWatched,
       }));
+
+      if (card.alreadyWatched) {
+        showRankSetterBlock();
+      } else {
+        remove(this._filmPopupMiddleContainer);
+      }
     });
 
     this._filmPopupInfoComponent.setAddToFavoritesButtonClickHandler(() => {

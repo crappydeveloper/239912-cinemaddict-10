@@ -26,14 +26,14 @@ const createFilmCardTemplate = (card) => {
 };
 
 export default class FilmCard extends AbstractComponent {
-  constructor(cards) {
+  constructor(card) {
     super();
 
-    this._cards = cards;
+    this._card = card;
   }
 
   getTemplate() {
-    return createFilmCardTemplate(this._cards);
+    return createFilmCardTemplate(this._card);
   }
 
   setClickHandler(handler) {

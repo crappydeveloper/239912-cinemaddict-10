@@ -171,7 +171,7 @@ export default class filmPopupInfo extends AbstractSmartComponent {
   }
 
   recoveryListeners() {
-    
+
   }
 
   getTemplate() {

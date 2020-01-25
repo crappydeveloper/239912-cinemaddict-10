@@ -1,10 +1,10 @@
 import AbstractComponent from './abstractComponent.js';
 
-const createLeftRatingTemplate = (card) => {
+const createFilmPopupUserRating = (card) => {
   const {title, poster} = card;
+
   return (
-    `<div class="form-details__middle-container">
-    <section class="film-details__user-rating-wrap">
+    `<section class="film-details__user-rating-wrap">
       <div class="film-details__user-rating-controls">
         <button class="film-details__watched-reset" type="button">Undo</button>
       </div>
@@ -46,17 +46,21 @@ const createLeftRatingTemplate = (card) => {
 
             <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="9" id="rating-9" checked>
             <label class="film-details__user-rating-label" for="rating-9">9</label>
-
           </div>
         </section>
       </div>
-    </section>
-  </div>`
+    </section>`
   );
 };
 
-export default class LeftRating extends AbstractComponent {
+export default class filmPopupUserRating extends AbstractComponent {
+  constructor(filmInfo) {
+    super();
+
+    this._filmInfo = filmInfo;
+  }
+
   getTemplate() {
-    return createLeftRatingTemplate();
+    return createFilmPopupUserRating(this._filmInfo);
   }
 }
