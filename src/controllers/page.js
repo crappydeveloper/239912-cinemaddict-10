@@ -123,7 +123,7 @@ export default class PageController {
       renderCards(cardListElement, sortedCards, this._onDataChange);
 
       if (sortType === SortType.DEFAULT) {
-        renderLoadMoreButton(this._topRatedComponent.getElement(), RenderPosition.BEFOREBEGIN); // кажется мне, что это костыль
+        renderLoadMoreButton(this._topRatedComponent.getElement(), RenderPosition.BEFOREBEGIN);
       } else {
         remove(this._btnShowMoreComponent);
       }

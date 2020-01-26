@@ -65,8 +65,10 @@ export default class MovieController {
         render(this._container, this._filmPopupInfoComponent, RenderPosition.BEFOREEND);
         document.addEventListener(`keydown`, escKeyDownHandler);
         this._filmPopupInfoComponent.setButtonCloseClickHandler(removePopup);
+
         showRankSetterBlock();
       } else {
+        card.personalRating = null;
         remove(this._filmPopupMiddleContainer);
       }
     });
@@ -87,10 +89,12 @@ export default class MovieController {
       this._onDataChange(this, card, Object.assign({}, card, {
         alreadyWatched: !card.alreadyWatched,
       }));
+      console.log(card);
 
       if (card.alreadyWatched) {
         showRankSetterBlock();
       } else {
+        card.personalRating = null;
         remove(this._filmPopupMiddleContainer);
       }
     });
@@ -100,6 +104,21 @@ export default class MovieController {
         favorite: !card.favorite,
       }));
     });
+
+    this._filmPopupInfoComponent.setAnyEmojiClickHandler((evt) => {
+      const emojiInCommentBlock = this._filmPopupInfoComponent.getElement().querySelector(`.film-details__add-emoji-label`);
+      let chosenEmojiSrc = evt.target.src;
+      console.log(chosenEmojiSrc);
+      //render(emojiInCommentBlock, chosenEmoji, RenderPosition.BEFOREEND);
+      //создать компонент эмодзи, в который будет передаваться src
+      //Клик на эмодзи {очищение контейнера, добавление нового эмодзи}
+    });
+
+    this._filmPopupUserRatingComponent.setAnyScoreClickHandler((evt) => {
+      const personalRating = evt.target.textContent; //здесь было currentTarget. Посмотрим, не будет ли бага
+      card.personalRating = personalRating; //возможно, тут необходимо вызывать onDataChange
+    });
+
 
     if (oldFilmCardComponent && oldFilmPopupInfoComponent) {
       replace(this._filmCardComponent, oldFilmCardComponent);

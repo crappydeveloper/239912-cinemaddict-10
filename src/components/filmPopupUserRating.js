@@ -63,4 +63,11 @@ export default class filmPopupUserRating extends AbstractComponent {
   getTemplate() {
     return createFilmPopupUserRating(this._filmInfo);
   }
+
+  setAnyScoreClickHandler(handler) {
+    const buttonsWithRating = this.getElement().querySelectorAll(`.film-details__user-rating-score .film-details__user-rating-label`);
+    buttonsWithRating.forEach((it) => {
+      it.addEventListener(`click`, handler);
+    });
+  }
 }

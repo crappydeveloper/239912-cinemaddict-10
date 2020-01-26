@@ -56,7 +56,8 @@ const generatePopup = () => {
     isWatched: Math.random() > 0.5,
     watchlist: false,
     alreadyWatched: true,
-    favorite: false
+    favorite: false,
+    personalRating: null
   };
 };
 
