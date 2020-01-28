@@ -6,7 +6,7 @@ Thumbs.db
 .idea
 *.sublime*
 .vscode
-vs
+vs/
 
 # Вспомогательные файлы
 *.log*
