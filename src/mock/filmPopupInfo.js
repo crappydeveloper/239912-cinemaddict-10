@@ -16,8 +16,8 @@ const getDescription = () => {
 };
 
 const getRandomKey = (obj) => {
-    var keys = Object.keys(obj)
-    return keys[getRandomPosition(keys)];
+  const keys = Object.keys(obj);
+  return keys[getRandomPosition(keys)];
 };
 
 const getRandomDate = () => {
@@ -33,7 +33,7 @@ const generateComment = () => {
     text: DESCRIPTIONS[Math.floor(Math.random() * DESCRIPTIONS.length)],
     author: TITLES[getRandomPosition(TITLES)],
     date: `2019/12/31 23:59`,
-	emotion: getRandomKey(EMOJIS)
+    emotion: getRandomKey(EMOJIS)
   };
 };
 

@@ -3,6 +3,7 @@ import FilmCardComponent from '../components/filmCard.js';
 import FilmPopupInfoComponent from '../components/filmPopupInfo.js';
 import FilmPopupMiddleContainer from '../components/filmPopupMiddleContainer.js';
 import FilmPopupUserRatingComponent from '../components/filmPopupUserRating.js';
+import EmojiComponent from '../components/emoji.js';
 import {render, RenderPosition, remove, replace} from '../utils/render.js';
 
 export default class MovieController {
@@ -89,7 +90,6 @@ export default class MovieController {
       this._onDataChange(this, card, Object.assign({}, card, {
         alreadyWatched: !card.alreadyWatched,
       }));
-      console.log(card);
 
       if (card.alreadyWatched) {
         showRankSetterBlock();
@@ -107,16 +107,16 @@ export default class MovieController {
 
     this._filmPopupInfoComponent.setAnyEmojiClickHandler((evt) => {
       const emojiInCommentBlock = this._filmPopupInfoComponent.getElement().querySelector(`.film-details__add-emoji-label`);
+      emojiInCommentBlock.innerHTML = ``;
       let chosenEmojiSrc = evt.target.src;
-      console.log(chosenEmojiSrc);
-      //render(emojiInCommentBlock, chosenEmoji, RenderPosition.BEFOREEND);
-      //создать компонент эмодзи, в который будет передаваться src
-      //Клик на эмодзи {очищение контейнера, добавление нового эмодзи}
+
+      this._emojiComponent = new EmojiComponent(chosenEmojiSrc);
+      render(emojiInCommentBlock, this._emojiComponent, RenderPosition.BEFOREEND);
     });
 
     this._filmPopupUserRatingComponent.setAnyScoreClickHandler((evt) => {
-      const personalRating = evt.target.textContent; //здесь было currentTarget. Посмотрим, не будет ли бага
-      card.personalRating = personalRating; //возможно, тут необходимо вызывать onDataChange
+      const personalRating = evt.target.textContent; // здесь было currentTarget. Посмотрим, не будет ли бага
+      card.personalRating = personalRating; // возможно, тут необходимо вызывать onDataChange
     });
 
 
