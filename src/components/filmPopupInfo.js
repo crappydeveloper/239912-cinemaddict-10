@@ -1,13 +1,14 @@
+import {EMOJIS} from '../const.js';
 import {formatDate} from '../utils/common.js';
 import AbstractSmartComponent from './abstractSmartComponent.js';
 
 const createCommentMarkup = (comment) => {
-  const {text, author, date} = comment;
+  const {text, author, date, emotion} = comment;
 
   return (
     `<li class="film-details__comment">
       <span class="film-details__comment-emoji">
-        <img src="./images/emoji/smile.png" width="55" height="55" alt="emoji">
+        <img src="${EMOJIS[emotion]}" width="55" height="55" alt="emoji">
       </span>
       <div>
         <p class="film-details__comment-text">${text}</p>

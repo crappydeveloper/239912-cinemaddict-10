@@ -1,6 +1,7 @@
 import {TITLES} from '../const.js';
 import {POSTERS} from '../const.js';
 import {DESCRIPTIONS} from '../const.js';
+import {EMOJIS} from '../const.js';
 
 const getRandomPosition = (arr) => {
   return Math.floor(Math.random() * arr.length);
@@ -12,6 +13,11 @@ const getDescription = () => {
   descriptionsCopy.length = getRandomPosition(descriptionsCopy) + 1;
   descriptionsCopy = descriptionsCopy.join(` `);
   return descriptionsCopy;
+};
+
+const getRandomKey = (obj) => {
+    var keys = Object.keys(obj)
+    return keys[getRandomPosition(keys)];
 };
 
 const getRandomDate = () => {
@@ -26,7 +32,8 @@ const generateComment = () => {
   return {
     text: DESCRIPTIONS[Math.floor(Math.random() * DESCRIPTIONS.length)],
     author: TITLES[getRandomPosition(TITLES)],
-    date: `2019/12/31 23:59`
+    date: `2019/12/31 23:59`,
+	emotion: getRandomKey(EMOJIS)
   };
 };
 

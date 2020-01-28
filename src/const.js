@@ -30,4 +30,11 @@ const POSTERS = [
   `images/posters/the-great-flamarion.jpg`
 ];
 
-export {DESCRIPTIONS, TITLES, POSTERS};
+const EMOJIS = {
+	SMILE: 'images/emoji/angry.png',
+	SLEEPING: 'images/emoji/puke.png',
+	PUKE: 'images/emoji/sleeping.png',
+	ANGRY: 'images/emoji/smile.png'
+};
+
+export {DESCRIPTIONS, TITLES, POSTERS, EMOJIS};
