@@ -127,8 +127,4 @@ export default class MovieController {
       render(this._container, this._filmCardComponent, RenderPosition.BEFOREEND);
     }
   }
-
-  removePopup() {
-    remove(this._filmPopupInfoComponent);
-  }
 }

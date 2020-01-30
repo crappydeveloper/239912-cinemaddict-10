@@ -172,7 +172,7 @@ export default class filmPopupInfo extends AbstractSmartComponent {
   }
 
   recoveryListeners() {
-
+    this._subscribeOnEvents();
   }
 
   getTemplate() {
@@ -204,5 +204,11 @@ export default class filmPopupInfo extends AbstractSmartComponent {
     emojisImages.forEach((it) => {
       it.addEventListener(`click`, handler);
     });
+  }
+  
+  _subscribeOnEvents() {
+    const element = this.getElement();
+    
+    // тут будут изменяться св-ва по клику (т.е. вешаться обработчики действий)
   }
 }
