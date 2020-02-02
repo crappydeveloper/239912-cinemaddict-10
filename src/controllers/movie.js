@@ -6,6 +6,11 @@ import FilmPopupUserRatingComponent from '../components/filmPopupUserRating.js';
 import EmojiComponent from '../components/emoji.js';
 import {render, RenderPosition, remove, replace} from '../utils/render.js';
 
+const Mode = {
+  DEFAULT: `default`,
+  POPUP: `popup`
+};
+
 export default class MovieController {
   constructor(container, onDataChange) {
     this._container = container;
@@ -125,6 +130,13 @@ export default class MovieController {
       replace(this._filmPopupInfoComponent, oldFilmPopupInfoComponent);
     } else {
       render(this._container, this._filmCardComponent, RenderPosition.BEFOREEND);
+    }
+  }
+
+  setDefaultView() {
+    if (this._mode !== Mode.DEFAULT) {
+      // this._replaceEditToTask();
+      // тут должно быть удаление попапа
     }
   }
 }
